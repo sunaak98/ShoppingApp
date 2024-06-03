@@ -22,7 +22,7 @@ for i in range(0,3):
 admin_db = {"admin1":"admin01","admin2":"admin02"}
 
 #Users login database. In the form of "user_id:user_password"
-user_db = udb.import_user_db("user_db.xlsx")
+user_db = {}
 
 #Session ID Storage. Empty list right now.
 sessionID = {}
@@ -128,7 +128,7 @@ def user_login(r_id):
     user = user_update(username,password)
     r_id = user.new_user()
     #print(len(user_db))
-    udb.save_new_user("user_db.xlsx", user_db)
+    #udb.save_new_user("user_db.xlsx", user_db)
 
   #Login User
   while(r_id is not 0 and r_id is 2):
@@ -147,18 +147,23 @@ def user_login(r_id):
 
 
 #Customer Page
-while(r_id not in range(1,4)):
+while(1):
   time.sleep(1)
   print("Please select your relation with us:")
   print("[1] Sign Up\t[2] Sign In\t[3] Exit")
   try:
     r_id = int(input("::"))
     os.system('clear')
-    user_login(r_id)
   except:
-    r_id = 4
+    #r_id = 4
     print("Wrong Choice...")
-  #time.sleep(1)
+  if(r_id in [1,2]):
+    user_login(r_id)
+  if(r_id == 3):
+    print("THANKYOU FOR VISITING DEMO MARKETPLACE")
+    time.sleep(3)
+    os.system('clear')
+    break
 
 
 
