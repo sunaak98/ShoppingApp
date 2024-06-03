@@ -6,7 +6,7 @@ import update_userxl_db as udb
 
 #Display the Welcome Message three times with a blink
 
-for i in range(0,3):
+for i in range(0,1):
     os.system('clear')
     time.sleep(1)
     print("***************************************")
@@ -22,7 +22,7 @@ for i in range(0,3):
 admin_db = {"admin1":"admin01","admin2":"admin02"}
 
 #Users login database. In the form of "user_id:user_password"
-user_db = udb.import_user_db("user_db.xlsx")
+#user_db = udb.import_user_db("user_db.xlsx")
 
 #Session ID Storage. Empty list right now.
 sessionID = {}
@@ -30,10 +30,23 @@ sessionID = {}
 #Relation_ID
 r_id = 4
 
+#General Variables
+global usr_exist
+usr_exist = 0       #To check if user exist
+row_num = 0         #To record the row number of user found
+
+#Exporting Excel
+path = "user_db.xlsx"
+wb = xl.open(path)
+sheet = wb.active
+m_row = sheet.max_row
+m_col = sheet.max_column
+
 #Creating Classes
 
 #This class adds new user, authenticate them, updates new id or username and delete a user information. It also creates session id for the same user
 class user_update():
+  global usr_exist
   #Initialization of the class: constructor
   def __init__(self, username, password,):
     self.username = username
@@ -42,9 +55,14 @@ class user_update():
   #creating new user
   def new_user(self):
     #Authenticating the new username must not exist, else make the new user
-    if self.username in user_db:
-      print("User Already Exist")
-      ans = input("User Already Exist.\n1. Log In\t2. Create Account\t3. Exit")
+    for i in range(2, m_row+1):
+      if self.username == sheet.cell(i,1).value:
+        #print("User Already Exist")
+        row_num = i
+        usr_exist = 1
+        break
+    if usr_exist == 1:
+      ans = int(input("User Already Exist.\n1. Log In\t2. Create Account\t3. Exit\n:: "))
       if ans == 1:
         user_login(2)
       if ans == 2:
@@ -56,26 +74,30 @@ class user_update():
         time.sleep(3)
         os.system('clear')      
       time.sleep(3)
+      usr_exist = 0
       return 1
-    else:
-      self.session_id = uuid.uuid4()
-      user_db[self.username] = [self.password, str(uuid.uuid4())]
+    if usr_exist == 0:
+      self.session_id = str(uuid.uuid4())
+      sheet.cell(m_row+1,1).value = self.username
+      sheet.cell(m_row+1,2).value = self.password
+      sheet.cell(m_row+1,3).value = self.session_id 
+      #user_db[self.username] = [self.password, str(uuid.uuid4())]
       print("Account Created Successfully. ")
+      m_row = m_row + 1
       time.sleep(2)
       #print(user_db)
       #print(sessionID)
       return 0
 
   def auth_user(self):
-    if self.username in user_db:
-      if self.password in user_db[self.username]:
-        print("Authorisation successful")
-        time.sleep(3)
-      else:
-        print("Wrong Password")
-        pass_choice = str(input("1. Forgot Password\t2. Re-enter Password:"))
+    for i in range(2, m_row+1):
+      if self.username == sheet.cell(i,1).value:
+        #print("User Already Exist")
+        row_num = i
+        usr_exist = 1
+        break
 
-    else:
+    if usr_exist == 0:
       ans = str(input("User Does Not Exist. Create Account? [Y/N]: "))
       if ans == "Y" or ans == "y":
         os.system('clear')
@@ -128,7 +150,7 @@ def user_login(r_id):
     user = user_update(username,password)
     r_id = user.new_user()
     #print(len(user_db))
-    udb.save_new_user("user_db.xlsx", user_db)
+    wb.save(path)
 
   #Login User
   while(r_id is not 0 and r_id is 2):
@@ -147,17 +169,23 @@ def user_login(r_id):
 
 
 #Customer Page
-while(r_id not in range(1,4)):
+while(1):
   time.sleep(1)
   print("Please select your relation with us:")
   print("[1] Sign Up\t[2] Sign In\t[3] Exit")
   try:
     r_id = int(input("::"))
     os.system('clear')
-    user_login(r_id)
   except:
     r_id = 4
     print("Wrong Choice...")
+  if(r_id == 3):
+    print("THANKYOU FOR VISITING DEMO MARKETPLACE")
+    time.sleep(3)
+    os.system('clear')
+    break
+  if(r_id in [1,2]):
+    user_login(r_id)
   #time.sleep(1)
 
 
