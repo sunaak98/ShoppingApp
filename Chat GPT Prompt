@@ -1,0 +1,43 @@
+I have a problem statement to make a shopping application program using python. Below is the problem statement. Give me the python script with detailed explanation to integrate entire script. Make database using excel sheet and use pandas to integrate excel sheet into the code:
+
+Problem Scenario: You have to develop a shopping application or e-commerce application which has login and public login features on the Python platform. The applications that have been developed should also include categories, such as 3–4 for footwear, clothing, electronics, etc. It should be possible to add and update categories in the application. Additionally, it must contain a feature that allows you to add or remove items from your cart. Finally, the program needs to support a variety of payment options, including UPI and debit cards. This should be only backend implementation, and UX/UI and database connectivity are not required. Guidelines: 
+• A welcome message should initially be displayed in the e-commerce application, such as "Welcome to the Demo Marketplace". 
+• User login and admin login should be created once the code for the welcome message has been written. For the creation of demo login and admin login, demo databases for those should be created for the user and admin verification, and session id creation. 
+• After databases are created, create admin and user logins. It is necessary to construct a sample product catalog with three to four product categories, such as Boots, Coats, Jackets, and Caps. The product id, name, category id, and price should all be present for each item in the dummy database of the catalog. Both users and administrators can view the catalog. 
+• User login rights include the ability to view cart contents, add items to carts, and remove items from carts. The user should be able to add items or delete items in the cart using session id, product id, and quantity. 
+• Next, the program should provide demo payment checkout options, like Net banking, PayPal, UPI, etc. After selecting the payment option, a checkout message like, "Your order is successfully placed" or "You will be shortly redirected to the portal for Unified Payment Interface to make a payment of Rs. 2000", etc., should be displayed. 
+• Additionally, the admin can only log in using his credentials, and if the admin attempts to log in using another set of credentials, an error notice must appear. 
+• Admin should not be able to interfere with any of the functions that the user can perform, as discussed above. An error should appear if the admin tries to carry out those tasks. 
+• Furthermore, using the previously selected attributes, the admin should be able to add new products to the catalog. Additionally, the program needs to make it possible for an existing product to be modified using an admin session id. 
+• The admin should then have the ability to remove any existing products from the already-generated catalog. 
+• Lastly, understanding the dynamic demands of the market, the admin should be able to add a new category of product and delete the prevailing category of product from the catalog. 
+• Users should not be able to take advantage of any of the admin's rights, as described above.
+
+Also add a clear console feature whenever program runs fresh. Make sure to take care of windows and Mac OS compatibility
+
+In Above code, add error handling also. Keep following product categories:
+1. Footwear
+2. T-shirts
+3. Jeans
+4. Wallets
+5. Bags
+
+If the database excel sheet is not present, then create the sheet and do not throw any error.
+
+In the start of application, program should ask to Sign Up and login only. No new User should be able to sign up with user id as 'Admin1'.
+No new user should be able to sign up with an already existing username in the database.
+In the database for user login, admin user should be present from start. Admin user is is hardcoded to 'Admin1', password as 'Admin123' and role as 'admin'.
+When user perform login action and gives user id as 'Admin1' and password as 'Admin123', then program should automatically recognise the admin and make admin login instead of user login.
+If during login, user id is not found, ask to either quite or create a new account. Always create new login for user only. Admin credentials should be username as Admin1 and password as Admin123. admin credentials with new session id should be stored in a dictionary and not in excel database.
+
+In user account, there should be facility to change the password and update the same in database while keeping the seen id same. user should also be able to delete the account by deleting username and password
+
+The entire program should run in infinite loop with feature to exit the program whenevr user or admin selects exit criteria.
+
+Following criteria should be used to exit the program with a Thank you and good bye message and end the session:
+1. If the user is not found and proceeds to choose not to make a new account, then exit the program with a good bye message and should not continue to run.
+2. In User menu, user selects exit.
+3. If in admin menu, admin selects exit.
+4. if user or admin presses control+q during any session of the program.
+
+When the program exits, update all the excel documents with new data, save them and close them.
