@@ -37,6 +37,7 @@
 import pandas as pd
 import os
 import sys
+import time
 
 # Constants
 USER_DB = 'user_db.xlsx'
@@ -165,7 +166,7 @@ class ShoppingCart:
         self.cart = []
 
     def add_to_cart(self, product_data, product_id, quantity):
-        product = product_data[product_data['product_id'] == product_id]
+        product = product_data[product_data['product_id'] == int(product_id)]
         if not product.empty:
             self.cart.append({'product_id': product_id, 'quantity': quantity})
             print("Product added to cart.")
@@ -173,7 +174,7 @@ class ShoppingCart:
             print("Product not found.")
 
     def remove_from_cart(self, product_id):
-        self.cart = [item for item in self.cart if item['product_id'] != product_id]
+        self.cart = [item for item in self.cart if item['product_id'] != (product_id)]
         print("Product removed from cart.")
 
     def view_cart(self):
@@ -181,23 +182,80 @@ class ShoppingCart:
         for item in self.cart:
             print(f"Product ID: {item['product_id']}, Quantity: {item['quantity']}")
 
-    def checkout(self):
+    def checkout(self, product_id):
         if self.cart:
             print("Select payment method:")
-            print("1. Net Banking")
-            print("2. PayPal")
-            print("3. UPI")
+            print("1. Card")
+            print("2. UPI")
+            print("3. COD")
+            print("4. Cancel Order and Exit")
             choice = input("Enter your choice: ")
-            if choice in ['1', '2', '3']:
+            if choice == '1':
+                attempt = 0
+                while (True):
+                    if attempt >=3:
+                        print("\nMax attempt Crossed. Re-directing to account")
+                        time.sleep(2)
+                        break
+                    card_number = input('Enter Card Number: ')
+                    if len(card_number) !=16:
+                        print("Enter Valid 16 digit Card Number!!!")
+                        attempt +=1
+                        pass
+                    else:
+                        try:
+                            card_number = int(card_number)
+                            try:
+                                doe = int(input('Enter Expiry Date[MMYY]: '))
+                                cvv = int(input('Enter CVV: '))
+                                print("Your order is successfully placed.")
+                                print("Your order is successfully placed.")
+                                print("Re-directing to account")
+                                time.sleep(3)
+                                self.cart = []
+                                #self.cart = [item for item in self.cart if item['product_id'] != (product_id)]
+                                break
+                            except:
+                                print('\nEnter Valid Expiry date and CVV!!!')
+                                attempt +=1
+                                pass                            
+                        except:
+                            print("\nEnter Valid 16 Digit Card Number!!!")
+                            attempt +=1
+                            pass
+            elif choice == '2':
+                upi_id = input('Enter UPI ID: ')
                 print("Your order is successfully placed.")
+                print("Re-directing to account")
+                time.sleep(3)
+                self.cart = []
+                #self.cart = [item for item in self.cart if item['product_id'] != (product_id)]
+            elif choice == '3':
+                print("Your order is successfully placed.")
+                print("Your order is successfully placed.")
+                print("Re-directing to account")
+                time.sleep(3)
+                self.cart = []
+                #self.cart = [item for item in self.cart if item['product_id'] != (product_id)]
+            elif choice == '4':
+                print("Order Cancelled")
+                #self.cart = [item for item in self.cart if item['product_id'] != (product_id)]
+                time.sleep(2)
+                print("\nThank you and Good Bye!!!")
+                exit()
             else:
                 print("Invalid choice. Please try again.")
         else:
             print("Cart is empty.")
 
 def main():
-    clear_console()
-    print("Welcome to the Demo Marketplace")
+    for i in range(3):
+        clear_console()
+        time.sleep(1)
+        print("\n************************************************")
+        print("\n****** Welcome to the Demo Marketplace *********")
+        print("\n************************************************")
+        time.sleep(1)
     initialize_databases()
     user_data, product_data = load_databases()
     
@@ -313,7 +371,9 @@ def user_menu(user, user_data, product_data):
         elif choice == '4':
             cart.view_cart()
         elif choice == '5':
-            cart.checkout()
+            cart.checkout(product_id)
+            cart.remove_from_cart(product_id)
+            clear_console()
         elif choice == '6':
             new_password = input("Enter new password: ")
             user_data = user.change_password(user_data, new_password)
